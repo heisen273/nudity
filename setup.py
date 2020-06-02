@@ -7,7 +7,7 @@ setup(
     long_description=open('README.rst').read(),
     author='Can Aydogan',
     author_email='canaydogan89@gmail.com',
-    url='https://github.com/canaydogan/nudity',
+    url='https://github.com/heisen273/nudity',
     license='MIT',
     packages=['nudity'],
     include_package_data=True,
@@ -18,7 +18,7 @@ setup(
         'Programming Language :: Python :: 3'
     ],
     keywords="nude, nudity, detection, pornographic, inappropriate content",
-    install_requires=['tensorflow'],
+    install_requires=['tensorflow', 'requests'],
     python_requires='>=3',
     entry_points={'console_scripts': ['nudity = nudity:main']}
 )
