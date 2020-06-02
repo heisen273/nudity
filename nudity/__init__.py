@@ -4,6 +4,7 @@ from __future__ import print_function
 import os
 import numpy as np
 import tensorflow as tf
+import requests
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -21,21 +22,22 @@ class Nudity:
         self.input_operation = self.graph.get_operation_by_name(input_name);
         self.output_operation = self.graph.get_operation_by_name(output_name);
 
-    def read_tensor_from_image_file(self, file_name, input_height=299, input_width=299,
+    def read_tensor_from_image_file(self, url, input_height=299, input_width=299,
     				input_mean=0, input_std=255):
       input_name = "file_reader"
       output_name = "normalized"
-      file_reader = tf.read_file(file_name, input_name)
-      if file_name.endswith(".png"):
-        image_reader = tf.image.decode_png(file_reader, channels = 3,
+      imageData = requests.get(url).content
+
+      if ".png" in url:
+        image_reader = tf.image.decode_png(imageData, channels = 3,
                                            name='png_reader')
-      elif file_name.endswith(".gif"):
-        image_reader = tf.squeeze(tf.image.decode_gif(file_reader,
+      elif ".gif" in url:
+        image_reader = tf.squeeze(tf.image.decode_gif(imageData,
                                                       name='gif_reader'))
-      elif file_name.endswith(".bmp"):
-        image_reader = tf.image.decode_bmp(file_reader, name='bmp_reader')
+      elif ".bmp" in url:
+        image_reader = tf.image.decode_bmp(imageData, name='bmp_reader')
       else:
-        image_reader = tf.image.decode_jpeg(file_reader, channels = 3,
+        image_reader = tf.image.decode_jpeg(imageData, channels = 3,
                                             name='jpeg_reader')
       float_caster = tf.cast(image_reader, tf.float32)
       dims_expander = tf.expand_dims(float_caster, 0);
